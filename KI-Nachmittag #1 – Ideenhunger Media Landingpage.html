@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Der erste ideenhunger KI-Nachmittag</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #38564f;
+    --bg-dark: #151b1e;
+    --accent: #c6fbb0;
+    --text: #ffffff;
+    --card: #2a3f3a;
+    --border: #4a7066;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  /* NAV */
+  nav {
+    background: var(--bg-dark);
+    padding: 1.2rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .nav-logo {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+
+  .nav-cta {
+    background: var(--accent);
+    color: var(--bg-dark);
+    padding: 0.5rem 1.4rem;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+
+  .nav-cta:hover { opacity: 0.85; }
+
+  /* HERO */
+  .hero {
+    background: var(--bg-dark);
+    padding: 6rem 2rem 5rem;
+    text-align: center;
+  }
+
+  .hero-tag {
+    display: inline-block;
+    background: var(--accent);
+    color: var(--bg-dark);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.3rem 1rem;
+    border-radius: 2px;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 900;
+    line-height: 1.15;
+    max-width: 800px;
+    margin: 0 auto 1.5rem;
+  }
+
+  .hero h1 span { color: var(--accent); }
+
+  .hero p {
+    font-size: 1.15rem;
+    max-width: 580px;
+    margin: 0 auto 2.5rem;
+    color: #ccc;
+  }
+
+  .hero-meta {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+    font-size: 0.95rem;
+    color: #aaa;
+  }
+
+  .hero-meta span { display: flex; align-items: center; gap: 0.4rem; }
+  .hero-meta strong { color: var(--accent); }
+
+  .btn-primary {
+    background: var(--accent);
+    color: var(--bg-dark);
+    padding: 0.9rem 2.2rem;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 1rem;
+    text-decoration: none;
+    display: inline-block;
+    transition: opacity 0.2s;
+  }
+
+  .btn-primary:hover { opacity: 0.85; }
+
+  /* SECTIONS */
+  section { padding: 5rem 2rem; max-width: 1000px; margin: 0 auto; }
+
+  .section-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.8rem;
+  }
+
+  h2 {
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    font-weight: 900;
+    margin-bottom: 1rem;
+  }
+
+  h2 span { color: var(--accent); }
+
+  .lead {
+    font-size: 1.05rem;
+    color: #ccc;
+    max-width: 620px;
+    margin-bottom: 3rem;
+  }
+
+  /* CARDS */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.8rem;
+  }
+
+  .card-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .card h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--accent);
+  }
+
+  .card p { font-size: 0.92rem; color: #ccc; }
+
+  /* USE CASE */
+  .usecase-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  @media(max-width: 600px) { .usecase-grid { grid-template-columns: 1fr; } }
+
+  .usecase-box {
+    background: var(--bg-dark);
+    border-left: 4px solid var(--accent);
+    border-radius: 6px;
+    padding: 2rem;
+  }
+
+  .usecase-box h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+    color: var(--accent);
+  }
+
+  .usecase-box p { font-size: 0.92rem; color: #ccc; }
+
+  /* AGENDA */
+  .agenda-list { display: flex; flex-direction: column; gap: 1rem; }
+
+  .agenda-item {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 1.5rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.4rem 1.8rem;
+    align-items: start;
+  }
+
+  @media(max-width: 600px) { .agenda-item { grid-template-columns: 1fr; } }
+
+  .agenda-time {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+
+  .agenda-title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+  }
+
+  .agenda-desc { font-size: 0.88rem; color: #bbb; }
+
+  /* TOOLS */
+  .tools-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .tool-tag {
+    background: var(--bg-dark);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 0.5rem 1.2rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  /* FORM */
+  .form-section {
+    background: var(--bg-dark);
+    padding: 5rem 2rem;
+  }
+
+  .form-inner {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .form-group {
+    margin-bottom: 1.4rem;
+  }
+
+  label {
+    display: block;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  input, select, textarea {
+    width: 100%;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text);
+    padding: 0.85rem 1rem;
+    font-size: 0.95rem;
+    font-family: inherit;
+    transition: border-color 0.2s;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+
+  textarea { resize: vertical; min-height: 100px; }
+
+  select option { background: var(--bg-dark); }
+
+  .btn-submit {
+    width: 100%;
+    background: var(--accent);
+    color: var(--bg-dark);
+    border: none;
+    padding: 1rem;
+    font-size: 1rem;
+    font-weight: 700;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    font-family: inherit;
+    margin-top: 0.5rem;
+  }
+
+  .btn-submit:hover { opacity: 0.85; }
+
+  /* SUCCESS */
+  .success-msg {
+    display: none;
+    background: var(--card);
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    padding: 2.5rem;
+    text-align: center;
+    margin-top: 2rem;
+  }
+
+  .success-msg h3 { color: var(--accent); font-size: 1.4rem; margin-bottom: 0.5rem; }
+  .success-msg p { color: #ccc; }
+
+  /* FOOTER */
+  footer {
+    background: var(--bg-dark);
+    text-align: center;
+    padding: 2.5rem 2rem;
+    font-size: 0.85rem;
+    color: #666;
+    border-top: 1px solid var(--border);
+  }
+
+  footer span { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">[ideen · hunger]</div>
+  <a href="#anmelden" class="nav-cta">Ich bin dabei →</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">Internes Format · Alle 2 Wochen</div>
+  <h1>Der erste<br><span>[KI · Nachmittag]</span><br>bei ideenhunger</h1>
+  <p>Wir nehmen uns einen Nachmittag Zeit — für uns, für Neugier, für ehrlichen Austausch darüber, was wir schon machen und was noch möglich wäre.</p>
+  <div class="hero-meta">
+    <span>📅 <strong>5. Mai 2025</strong></span>
+    <span>🕐 <strong>14:00 – 16:30 Uhr</strong></span>
+    <span>📍 <strong>Vor Ort</strong></span>
+    <span>👥 <strong>das ideenhunger-Team</strong></span>
+  </div>
+  <a href="#anmelden" class="btn-primary">Jetzt anmelden →</a>
+</div>
+
+<!-- WARUM -->
+<section>
+  <div class="section-label">// Warum das hier wichtig ist</div>
+  <h2>KI passiert. <span>Ob wir mitmachen, entscheiden wir.</span></h2>
+  <p class="lead">Dieser Nachmittag ist kein Seminar. Kein Vortrag. Kein Pflichtprogramm. Es ist die Chance, ehrlich zu schauen: Was nutzen wir schon? Was wollen wir noch? Und was können wir daraus für unsere Kunden machen?</p>
+  <div class="cards">
+    <div class="card">
+      <div class="card-icon">🧠</div>
+      <h3>Gemeinsam lernen</h3>
+      <p>Kein Vorwissen nötig. Jede Erfahrung zählt — vom ersten Chatbot-Test bis zum täglichen KI-Workflow.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">⚡</div>
+      <h3>Direkt anwendbar</h3>
+      <p>Keine Theorie-Schlachten. Wir schauen, was heute schon funktioniert — in unserem Alltag, mit unseren Projekten.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔁</div>
+      <h3>Alle 2 Wochen</h3>
+      <p>Das hier ist der Start einer Routine. Klein anfangen, dranbleiben, wachsen — als Team.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🚀</div>
+      <h3>Für unsere Kunden</h3>
+      <p>Was wir intern aufbauen, geben wir weiter. KI-Kompetenz als Teil unseres Leistungsangebots.</p>
+    </div>
+  </div>
+</section>
+
+<!-- USE CASES -->
+<section>
+  <div class="section-label">// Deine Vorbereitung</div>
+  <h2>Du bringst <span>zwei Dinge</span> mit.</h2>
+  <p class="lead">Kein Referat, keine Vorbereitung, die Stunden kostet. Nur zwei kurze Gedanken, die du mitbringst und teilst — und die Neugier, zu hören, was die anderen so treiben.</p>
+  <div class="usecase-grid">
+    <div class="usecase-box">
+      <h3>✅ Use Case #1 — Was ich schon nutze</h3>
+      <p>Ein konkretes Beispiel, wo du KI bereits in deiner Arbeit einsetzt. Egal wie klein oder groß. E-Mail-Entwürfe, Recherche, Texte, Bildgenerierung — alles gilt.</p>
+    </div>
+    <div class="usecase-box">
+      <h3>💡 Use Case #2 — Was ich mir wünsche</h3>
+      <p>Eine Aufgabe oder ein Problem, bei dem du dir vorstellst, dass KI helfen könnte — aber du es noch nicht ausprobiert hast. Wunsch genügt, kein Plan nötig.</p>
+    </div>
+  </div>
+</section>
+
+<!-- AGENDA -->
+<section>
+  <div class="section-label">// Ablauf</div>
+  <h2>Was uns <span>erwartet.</span></h2>
+  <p class="lead">2,5 bis 3 Stunden, vor Ort, gemeinsam. Kein Frontalunterricht — ein echtes Team-Format.</p>
+  <div class="agenda-list">
+    <div class="agenda-item">
+      <div class="agenda-time">13:00 – 13:15</div>
+      <div>
+        <div class="agenda-title">[Start · up] Ankommen & Rahmen setzen</div>
+        <div class="agenda-desc">Warum machen wir das? Vision des KI-Nachmittags, Spielregeln, Überblick.</div>
+      </div>
+    </div>
+    <div class="agenda-item">
+      <div class="agenda-time">13:15 – 13:35</div>
+      <div>
+        <div class="agenda-title">[Wis · sen] KI-Schnellcheck im Team</div>
+        <div class="agenda-desc">Blitzlicht-Runde: Welches Tool nutzt du — und wofür? Gemeinsame Bestandsaufnahme.</div>
+      </div>
+    </div>
+    <div class="agenda-item">
+      <div class="agenda-time">13:35 – 14:05</div>
+      <div>
+        <div class="agenda-title">[Use · Case · 1] KI, die ich schon lebe</div>
+        <div class="agenda-desc">Jede Person stellt ihren Use Case vor (je ~2 Min.). Moderator clustert live.</div>
+      </div>
+    </div>
+    <div class="agenda-item">
+      <div class="agenda-time">14:05 – 14:35</div>
+      <div>
+        <div class="agenda-title">[Use · Case · 2] KI, die ich mir wünsche</div>
+        <div class="agenda-desc">Wunsch-Use-Cases vorstellen & priorisieren. Dot-Voting: Was hat das größte Potenzial?</div>
+      </div>
+    </div>
+    <div class="agenda-item">
+      <div class="agenda-time">14:35 – 14:50</div>
+      <div>
+        <div class="agenda-title">[Pau · se] ☕ Kurze Auszeit</div>
+        <div class="agenda-desc">Kaffee, Snacks, informeller Austausch. Ideen dürfen weiterschwirren.</div>
+      </div>
+    </div>
+    <div class="agenda-item">
+      <div class="agenda-time">14:50 – 15:20</div>
+      <div>
+        <div class="agenda-title">[Tief · gang] Top-Use-Cases unter der Lupe</div>
+        <div class="agenda-desc">Die 2–3 Top-Ideen vertiefen: Welches Tool? Welcher Aufwand? Was ist der Nutzen?</div>
+      </div>
+    </div>
+    <div class="agenda-item">
+      <div class="agenda-time">15:20 – 15:40</div>
+      <div>
+        <div class="agenda-title">[Out · put] Dokumentation & Übergabe</div>
+        <div class="agenda-desc">Ergebnisse sichern, Experimente verteilen, Rückblick: 1 Satz pro Person.</div>
+      </div>
+    </div>
+    <div class="agenda-item">
+      <div class="agenda-time">15:40 – 16:00</div>
+      <div>
+        <div class="agenda-title">[Aus · blick] Nächste Session & Abschluss</div>
+        <div class="agenda-desc">Datum & Thema von KI-Nachmittag #2 festlegen. Gemeinsamer Abschluss.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TOOLS -->
+<section>
+  <div class="section-label">// Tools, die wir schon kennen</div>
+  <h2>Unser <span>KI-Stack.</span></h2>
+  <p class="lead">Diese Tools sind bereits bei uns im Einsatz — oder zumindest schon mal ausprobiert worden.</p>
+  <div class="tools-grid">
+    <div class="tool-tag">ChatGPT</div>
+    <div class="tool-tag">Gemini</div>
+    <div class="tool-tag">Perplexity</div>
+    <div class="tool-tag">Nanobanana</div>
+    <div class="tool-tag">+ weitere</div>
+  </div>
+</section>
+
+<!-- FORM -->
+<div class="form-section" id="anmelden">
+  <div class="form-inner">
+    <div class="section-label">// Anmeldung</div>
+    <h2 style="margin-bottom:0.5rem;">Ich bin <span>dabei.</span></h2>
+    <p style="color:#ccc; margin-bottom:2.5rem; font-size:0.95rem;">Trag dich ein — damit wir wissen, wer kommt, und damit du rechtzeitig alle Infos bekommst.</p>
+
+    <form id="anmeldeForm">
+      <div class="form-group">
+        <label>Name</label>
+        <input type="text" placeholder="Dein Name" required>
+      </div>
+
+      <div class="form-group">
+        <label>Use Case #1 — Was ich schon mit KI mache</label>
+        <textarea placeholder="Kurz beschreiben, kein Roman nötig …"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Use Case #2 — Was ich mir von KI wünsche</label>
+        <textarea placeholder="Eine Idee, ein Problem, eine Hoffnung …"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Mein KI-Vorwissen</label>
+        <select>
+          <option value="" disabled selected>Bitte wählen …</option>
+          <option>Einsteiger — ich probiere gerade erst aus</option>
+          <option>Gelegentlicher Nutzer — ich kenne ein paar Tools</option>
+          <option>Regelmäßiger Nutzer — KI ist Teil meines Workflows</option>
+          <option>Fortgeschritten — ich experimentiere aktiv</option>
+        </select>
+      </div>
+      <button type="submit" class="btn-submit">Anmeldung absenden →</button>
+    </form>
+
+    <div class="success-msg" id="successMsg">
+      <h3>✅ Du bist dabei!</h3>
+      <p>Danke für deine Anmeldung. Wir freuen uns auf den ersten gemeinsamen KI-Nachmittag. Weitere Infos kommen rechtzeitig per Mail.</p>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 <span>ideenhunger media GmbH</span> · Internes Format · Alle 2 Wochen · [KI · Nachmittag]</p>
+</footer>
+
+<script>
+  document.getElementById('anmeldeForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    this.style.display = 'none';
+    document.getElementById('successMsg').style.display = 'block';
+  });
+
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>
+
+</body>
+</html>
